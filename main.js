@@ -1,37 +1,24 @@
-const App = {
-  data() {
-    return {
-      placeholderString: 'Введите заметку',
-      title: 'Список заметок',
-      inputValue: '',
-      notes: ['Заметка 1', 'Заметка 2', 'Заметка 154']
-    }
-  },
+Vue.createApp({
+  data: () => ({
+    myHtml: '<h1>Vue 3 app</h1>',
+    title: 'Я есть грут',
+    person: {
+      fitstName: 'Andrey',
+      lastName: 'Klimenko',
+      age: 30
+    },
+    items: [1, 2]
+  }),
   methods: {
-    addNewNote() { 
-      if (this.inputValue === '') return;
-      this.notes.push(this.inputValue)
-      this.inputValue = ''
-    },
-    toUpperCase(item) {
-      return item.toUpperCase()
-    },
-    deleteNote(index) {
-      this.notes.splice(index, 1)
+    addItem(event) {
+      this.items.unshift(this.$refs.myInput.value)
+      this.$refs.myInput.value = ''
+      console.log(event.key);
     }
   },
   computed: {
-    doubleCountComputed() {
-      return this.notes.length * 2
-    }
-  },
-  watch: {
-    inputValue(value) {
-      if (value.length > 10) {
-        this.inputValue = ''
-      }
+    evenItems() {
+      return this.items.filter(i => i % 2 === 0)
     }
   }
-}
-
-Vue.createApp(App).mount('#app')
+}).mount('#app')

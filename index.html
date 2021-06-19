@@ -7,37 +7,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Test</title>
+  <style>
+    [v-cloak] {display: none;}
+  </style>
 </head>
 
 <body>
 
-  <div class="container" id="app">
-    <div class="card">
-      <h1 :style="{
-        color: inputValue.length < 5 ? 'red' : 'blue',
-        fontSize: inputValue.length < 3 ? '2rem' : '1.5rem'
-      }">{{ title }}</h1>
+  <div class="container pt-5" id="app" v-cloak>
+    <div class="card center">
+      <div v-html="myHtml"></div>
+      <!-- <h1 v-text="title"></h1>
+      <h1 v-once="">{{title}}</h1>
+      <h2 v-pre>{{title}}</h2>
+      <button
+        class="btn"
+        @click="title = 'Это новый заголовок'"
+      >Изменить заголовок</button> -->
+
       <div class="form-control">
-        <input
-          type="text"
-          :placeholder="placeholderString"
-          v-model="inputValue"
-          @keypress.enter = "addNewNote"
-        >
+        <input type="text" @keyup.enter="addItem($event)" ref="myInput">
       </div>
-      <button class="btn" @click="addNewNote">Добавить</button>
-      <hr>
-      <ul class="list" v-if="notes.length !== 0">
-        <li class="list-item" v-for="(note, index) in notes">
-          <span :class="['bold', {'primaty' : note.length > 5}]">{{ toUpperCase(note) }}</span>
-          <button class="btn danger" @click="deleteNote(index)">Удалить</button>
+      
+      <ul class="list" v-if="items.length">
+        <li
+          class="list-item"
+          v-for="(item, index) in items"
+          @click="items.splice(index, 1)"
+          :key="item"
+          >
+          <strong>{{item}}</strong>&nbsp;
+          <input type="text" @click.stop>
         </li>
-        <hr>
-        <li>
-          <strong>Общее количество: {{ notes.length }}</strong> | Удвоенное: {{ doubleCountComputed }}
-        </li>
+        <!-- <li class="list-item" v-for="value in person">
+          {{value}}
+        </li> -->
       </ul>
-      <div v-else>Заметок пока нет. Добавьте первую</div>
+      <h3 v-show="items.length === 0">Элементов нет</h3>
     </div>
   </div>
 
